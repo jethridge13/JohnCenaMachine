@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>John Cena Machine</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel ="stylesheet" type="text/css" href="./Stylesheet.css" />
+        <script src ="./js/JohnCenaMachine.js"></script>
+    </head>
+    <body onKeyPress="keySwitch(event.keyCode)">
+        <h1>The John Cena Machine by Leg Day</h1>
+        <div id="controlsToolbar">
+            <span class="toolbarButton"><input type="range" oninput="updateCenaVolume(this.value);"><strong>John Cena Volume</strong></span>
+            <span class="toolbarButton"><input type="range" oninput="updateBeatVolume(this.value);"><strong>Beat Volume</strong></span>
+            <span class="toolbarButton"><input type="checkBox" name="Beat1" value="Beat1" onchange="updateBeat1()"><strong>Beat 1</strong></span>
+            <span class="toolbarButton"><input type="checkBox" name="Beat2" value="Beat2" onchange="updateBeat2()"><strong>Beat 2</strong></span>
+            <span class="toolbarButton"><input type="checkBox" name="Beat3" value="Beat3" onchange="updateBeat3()"><strong>Beat 3</strong></span>
+        </div>
+        <canvas id="myCanvas" onmousedown="displayCoords(event)">
+        </canvas>
+        <script>
+            //init();
+        </script>
+    </body>
+</html>

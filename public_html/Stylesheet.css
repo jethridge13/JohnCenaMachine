@@ -1,0 +1,21 @@
+h1{
+    font-size:24pt;
+    font-family: "Impact", sans-serif;
+}
+
+#myCanvas{
+    width:95%;
+    height:fit-content;
+    border:1px solid #000000;
+}
+
+
+
+.toolbarButton {
+    margin-left:1%;
+    margin-right:1%;
+}
+
+#controlsToolbar {
+
+}
