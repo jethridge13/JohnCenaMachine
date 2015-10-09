@@ -3,6 +3,11 @@ h1{
     font-family: "Impact", sans-serif;
 }
 
+strong{
+    font-size:14pt;
+    font-family:sans-serif;
+}
+
 #myCanvas{
     width:95%;
     height:fit-content;

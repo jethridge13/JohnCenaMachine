@@ -20,6 +20,8 @@ and open the template in the editor.
             <span class="toolbarButton"><input type="checkBox" name="Beat1" value="Beat1" onchange="updateBeat1()"><strong>Beat 1</strong></span>
             <span class="toolbarButton"><input type="checkBox" name="Beat2" value="Beat2" onchange="updateBeat2()"><strong>Beat 2</strong></span>
             <span class="toolbarButton"><input type="checkBox" name="Beat3" value="Beat3" onchange="updateBeat3()"><strong>Beat 3</strong></span>
+            <span class="toolbarButton"><input type="range" min="-100" max="15" value="-100" oninput="updateLowPassFilter(this)"><strong>Bass Booster</strong></span>
+            <span class="toolbarButton"><input type="range" min="-100" max="15" value="-100" oninput="updateHighPassFilter(this)"><strong>Treble Booster</strong></span>
         </div>
         <canvas id="myCanvas" onmousedown="displayCoords(event)">
         </canvas>
