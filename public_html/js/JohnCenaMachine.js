@@ -1,5 +1,5 @@
 var context;
-var themeBuffer;
+var buffers;
 var themeLoaded = false;
 var gainNode;
 var beatNode;
@@ -15,6 +15,7 @@ var highPassFilter;
 window.addEventListener('load', init, false);
 function init() {
     try {
+        buffers = [];
         window.AudioContext = window.AudioContext || window.webkitAudioContext;
         context = new AudioContext();
         gainNode = context.createGain();
@@ -38,7 +39,7 @@ function loadTheme(url) {
     request.onload = function () {
         //console.log("Request loaded");
         context.decodeAudioData(request.response, function (buffer) {
-            themeBuffer = buffer;
+            buffers.push(buffer);
             themeLoaded = true;
             themeNode.connect(context.destination);
         }, function (error) {
@@ -199,7 +200,7 @@ function keySwitch(keyCode) {
     try {
         switch (keyCode) {
             case 113:
-                playSound(themeBuffer);
+                playSound(buffers[0]);
                 break;
         }
     } catch (e) {
