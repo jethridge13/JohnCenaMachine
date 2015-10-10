@@ -1,5 +1,7 @@
 var context;
 var buffers;
+var downBuffers;
+var upBuffers;
 var themeLoaded = false;
 var gainNode;
 var beatNode;
@@ -15,7 +17,9 @@ var highPassFilter;
 window.addEventListener('load', init, false);
 function init() {
     try {
-        buffers = [];
+        buffers = [null, null, null, null, null, null, null, null];
+        downBuffers = [null, null, null, null, null, null, null, null];
+        upBuffers = [null, null, null, null, null, null, null, null];
         window.AudioContext = window.AudioContext || window.webkitAudioContext;
         context = new AudioContext();
         gainNode = context.createGain();
@@ -23,7 +27,8 @@ function init() {
         themeNode = context.createGain();
         lowPassFilter = context.createBiquadFilter();
         highPassFilter = context.createBiquadFilter();
-        loadTheme("./MP3s/MainOctave/0.mp3");
+        loadSounds();
+        //loadTheme("./MP3s/MainOctave/0.mp3");
         loadBeat("./MP3s/Beats/Beat1.mp3", 1);
 
     } catch (e) {
@@ -32,15 +37,47 @@ function init() {
     }
 }
 
-function loadTheme(url) {
+function loadSounds(){
+    //Main Octave Loop
+    for(var i = 0; i < 8; i++){
+        var string = "./MP3s/MainOctave/";
+        string += i;
+        string+= ".mp3";
+        loadTheme(string, 0, i);
+    }
+    for(var i = 0; i < 8; i++){
+        var string = "./MP3s/DownOctave/";
+        string += i;
+        string += ".mp3";
+        loadTheme(string, 1, i);
+    }
+    for(var i = 0; i < 8; i++){
+        var string = "./MP3s/UpOctave/";
+        string += i;
+        string += ".mp3";
+        loadTheme(string, 2, i);
+    }
+}
+
+function loadTheme(url, n, i) {
     var request = new XMLHttpRequest();
     request.open('GET', url, true);
     request.responseType = 'arraybuffer';
     request.onload = function () {
         //console.log("Request loaded");
         context.decodeAudioData(request.response, function (buffer) {
-            buffers.push(buffer);
-            themeLoaded = true;
+            switch(n){
+                case 0:
+                    buffers[i] = buffer;
+                    break;
+                case 1:
+                    downBuffers[i] = buffer;
+                    break
+                case 2:
+                    upBuffers[i] = buffer;
+                    break;
+            }
+            //themeLoaded = true;
             themeNode.connect(context.destination);
         }, function (error) {
             console.log(error);
@@ -133,7 +170,9 @@ function updateBeat1() {
         try{
             var source = context.createBufferSource();
             source.buffer = beat1Buffer;
-            source.connect(context.destination);
+            //source.connect(context.destination);
+            source.connect(beatNode);
+            beatNode.connect(context.destination);
             source.start(0);
             beat1 = true;
             source.loop = 1;
@@ -199,8 +238,80 @@ function keySwitch(keyCode) {
     console.log(keyCode);
     try {
         switch (keyCode) {
-            case 113:
+            //Main Octave
+            case 97:
                 playSound(buffers[0]);
+                break;
+            case 115:
+                playSound(buffers[1]);
+                break;
+            case 100:
+                playSound(buffers[2]);
+                break;
+            case 102:
+                playSound(buffers[3]);
+                break;
+            case 103:
+                playSound(buffers[4]);
+                break;
+            case 104:
+                playSound(buffers[5]);
+                break;
+            case 106:
+                playSound(buffers[6]);
+                break;
+            case 107:
+                playSound(buffers[7]);
+                break;
+            //Down Octave
+            case 122:
+                playSound(downBuffers[0]);
+                break;
+            case 120:
+                playSound(downBuffers[1]);
+                break;
+            case 99:
+                playSound(downBuffers[2]);
+                break;
+            case 118:
+                playSound(downBuffers[3]);
+                break;
+            case 98:
+                playSound(downBuffers[4]);
+                break;
+            case 110:
+                playSound(downBuffers[5]);
+                break;
+            case 109:
+                playSound(downBuffers[6]);
+                break;
+            case 44:
+                playSound(downBuffers[6]);
+                break;
+            //Up Octave
+            case 113:
+                playSound(upBuffers[0]);
+                break;
+            case 119:
+                playSound(upBuffers[1]);
+                break;
+            case 101:
+                playSound(upBuffers[2]);
+                break;
+            case 114:
+                playSound(upBuffers[3]);
+                break;
+            case 116:
+                playSound(upBuffers[4]);
+                break;
+            case 121:
+                playSound(upBuffers[5]);
+                break;
+            case 117:
+                playSound(upBuffers[6]);
+                break;
+            case 105:
+                playSound(upBuffers[7]);
                 break;
         }
     } catch (e) {
