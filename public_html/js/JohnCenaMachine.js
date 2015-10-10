@@ -10,8 +10,10 @@ var beat1Source;
 var beat1Buffer;
 var beat2 = false;
 var beat2Source;
+var beat2Buffer;
 var beat3 = false;
 var beat3Source;
+var beat3Buffer;
 var lowPassFilter;
 var highPassFilter;
 window.addEventListener('load', init, false);
@@ -30,6 +32,8 @@ function init() {
         loadSounds();
         //loadTheme("./MP3s/MainOctave/0.mp3");
         loadBeat("./MP3s/Beats/Beat1.mp3", 1);
+        loadBeat("./MP3s/Beats/Beat2.mp3", 2);
+        loadBeat("./MP3s/Beats/Beat3.mp3", 3);
 
     } catch (e) {
         console.log(e);
@@ -100,7 +104,7 @@ function loadBeat(url, n) {
                     beat2Buffer = buffer;
                     break;
                 case 3:
-                    beat2Buffer = buffer;
+                    beat3Buffer = buffer;
                     break;
             }
             bufferReturn = buffer;
@@ -179,6 +183,7 @@ function updateBeat1() {
             beat1Source = source;
         } catch(e){
             alert("Sound not yet loaded");
+            console.log(e);
         }
     }
 }
@@ -192,7 +197,8 @@ function updateBeat2() {
         try{
             var source = context.createBufferSource();
             source.buffer = beat2Buffer;
-            source.connect(context.destination);
+            source.connect(beatNode);
+            beatNode.connect(context.destination);
             source.start(0);
             beat2 = true;
             source.loop = 1;
@@ -212,7 +218,8 @@ function updateBeat3() {
         try{
             var source = context.createBufferSource();
             source.buffer = beat3Buffer;
-            source.connect(context.destination);
+            source.connect(beatNode);
+            beatNode.connect(context.destination);
             source.start(0);
             beat3 = true;
             source.loop = 1;
