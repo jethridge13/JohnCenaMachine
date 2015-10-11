@@ -19,12 +19,14 @@ var beat3Source;
 var beat3Buffer;
 var lowPassFilter;
 var highPassFilter;
+var lowPass;
+var highPass;
 window.addEventListener('load', init, false);
-window.onload = function(){
+window.onload = function () {
     var c = document.getElementById("myCanvas");
     var context = c.getContext("2d");
     var cena = new Image();
-    cena.onload = function() {
+    cena.onload = function () {
         context.drawImage(cena, 0, 0);
     };
     cena.src = "./Cena.jpg";
@@ -44,6 +46,8 @@ function init() {
         themeNode = context.createGain();
         lowPassFilter = context.createBiquadFilter();
         highPassFilter = context.createBiquadFilter();
+        lowPass = context.createBiquadFilter();
+        highPass = context.createBiquadFilter();
         loadSounds();
         //TODO This isn't the best way of dealing with it.
         //Perhaps find a better way?
@@ -52,7 +56,6 @@ function init() {
         loadBeat("./MP3s/Beats/Beat1.mp3", 1);
         loadBeat("./MP3s/Beats/Beat2.mp3", 2);
         loadBeat("./MP3s/Beats/Beat3.mp3", 3);
-
     } catch (e) {
         console.log(e);
         alert('An Error has occurred.');
@@ -60,7 +63,7 @@ function init() {
 }
 
 function loadSounds() {
-    //Main Octave Loop
+//Main Octave Loop
     for (var i = 0; i < 8; i++) {
         var string = "./MP3s/MainOctave/";
         string += i;
@@ -86,63 +89,69 @@ function loadSources() {
         var source = context.createBufferSource();
         //console.log(i + ": " + buffers[i]);
         source.buffer = buffers[i];
-        //source.connect(context.destination);
         source.connect(gainNode);
+        gainNode.connect(lowPassFilter);
         gainNode.connect(context.destination);
-
-        source.connect(lowPassFilter);
         lowPassFilter.connect(context.destination);
         lowPassFilter.type = "lowshelf";
         lowPassFilter.value = 440;
         lowPassFilter.gain.value = -100;
-
-        source.connect(highPassFilter);
-        highPassFilter.connect(context.destination);
+        highPassFilter.connect(lowPass);
         highPassFilter.type = "highshelf";
         highPassFilter.value = 440;
         highPassFilter.gain.value = -100;
+        lowPass.connect(highPass);
+        lowPass.type = "lowpass";
+        lowPass.frequency = 0;
+        highPass.connect(context.destination);
+        highPass.type = "highpass";
+        highPass.frequency = 0;
         sources[i] = source;
     }
     for (var i = 0; i < 8; i++) {
         var source = context.createBufferSource();
         //console.log(i + ": " + downBuffers[i]);
         source.buffer = downBuffers[i];
-        //source.connect(context.destination);
         source.connect(gainNode);
+        gainNode.connect(lowPassFilter);
         gainNode.connect(context.destination);
-
-        source.connect(lowPassFilter);
-        lowPassFilter.connect(context.destination);
+        lowPassFilter.connect(highPassFilter);
         lowPassFilter.type = "lowshelf";
         lowPassFilter.value = 440;
         lowPassFilter.gain.value = -100;
-
-        source.connect(highPassFilter);
-        highPassFilter.connect(context.destination);
+        highPassFilter.connect(lowPass);
         highPassFilter.type = "highshelf";
         highPassFilter.value = 440;
         highPassFilter.gain.value = -100;
+        lowPass.connect(highPass);
+        lowPass.type = "lowpass";
+        lowPass.frequency = 0;
+        highPass.connect(context.destination);
+        highPass.type = "highpass";
+        highPass.frequency = 0;
         downSources[i] = source;
     }
     for (var i = 0; i < 8; i++) {
         var source = context.createBufferSource();
         //console.log(i + ": " + upBuffers[i]);
         source.buffer = upBuffers[i];
-        //source.connect(context.destination);
         source.connect(gainNode);
+        gainNode.connect(lowPassFilter);
         gainNode.connect(context.destination);
-
-        source.connect(lowPassFilter);
-        lowPassFilter.connect(context.destination);
+        lowPassFilter.connect(highPassFilter);
         lowPassFilter.type = "lowshelf";
         lowPassFilter.value = 440;
         lowPassFilter.gain.value = -100;
-
-        source.connect(highPassFilter);
-        highPassFilter.connect(context.destination);
+        highPassFilter.connect(lowPass);
         highPassFilter.type = "highshelf";
         highPassFilter.value = 440;
         highPassFilter.gain.value = -100;
+        lowPass.connect(highPass);
+        lowPass.type = "lowpass";
+        lowPass.frequency = 0;
+        highPass.connect(context.destination);
+        highPass.type = "highpass";
+        highPass.frequency = 0;
         upSources[i] = source;
     }
 }
@@ -200,8 +209,82 @@ function loadBeat(url, n) {
     request.send();
 }
 
-function playSound(source) {
+function playSound(source, n, i) {
     source.start(0);
+    switch (n) {
+        case 0:
+            var source = context.createBufferSource();
+            //console.log(i + ": " + upBuffers[i]);
+            source.buffer = buffers[i];
+            //source.connect(context.destination);
+            source.connect(gainNode);
+            gainNode.connect(lowPassFilter);
+            gainNode.connect(context.destination);
+            lowPassFilter.connect(highPassFilter);
+            lowPassFilter.type = "lowshelf";
+            lowPassFilter.value = 440;
+            lowPassFilter.gain.value = -100;
+            highPassFilter.connect(lowPass);
+            highPassFilter.type = "highshelf";
+            highPassFilter.value = 440;
+            highPassFilter.gain.value = -100;
+            lowPass.connect(highPass);
+            lowPass.type = "lowpass";
+            lowPass.frequency = 0;
+            highPass.connect(context.destination);
+            highPass.type = "highpass";
+            highPass.frequency = 0;
+            sources[i] = source;
+            break;
+        case 1:
+            var source = context.createBufferSource();
+            //console.log(i + ": " + upBuffers[i]);
+            source.buffer = downBuffers[i];
+            //source.connect(context.destination);
+            source.connect(gainNode);
+            gainNode.connect(lowPassFilter);
+            gainNode.connect(context.destination);
+            lowPassFilter.connect(highPassFilter);
+            lowPassFilter.type = "lowshelf";
+            lowPassFilter.value = 440;
+            lowPassFilter.gain.value = -100;
+            highPassFilter.connect(lowPass);
+            highPassFilter.type = "highshelf";
+            highPassFilter.value = 440;
+            highPassFilter.gain.value = -100;
+            lowPass.connect(highPass);
+            lowPass.type = "lowpass";
+            lowPass.frequency = 0;
+            highPass.connect(context.destination);
+            highPass.type = "highpass";
+            highPass.frequency = 0;
+            downSources[i] = source;
+            break;
+        case 2:
+            var source = context.createBufferSource();
+            //console.log(i + ": " + upBuffers[i]);
+            source.buffer = upBuffers[i];
+            //source.connect(context.destination);
+            source.connect(gainNode);
+            gainNode.connect(lowPassFilter);
+            gainNode.connect(context.destination);
+            lowPassFilter.connect(highPassFilter);
+            lowPassFilter.type = "lowshelf";
+            lowPassFilter.value = 440;
+            lowPassFilter.gain.value = -100;
+            highPassFilter.connect(lowPass);
+            highPassFilter.type = "highshelf";
+            highPassFilter.value = 440;
+            highPassFilter.gain.value = -100;
+            lowPass.connect(highPass);
+            lowPass.type = "lowpass";
+            lowPass.frequency = 0;
+            highPass.connect(context.destination);
+            highPass.type = "highpass";
+            highPass.frequency = 0;
+            upSources[i] = source;
+            break;
+    }
 }
 
 function updateCenaVolume(val) {
@@ -230,10 +313,10 @@ function updateBeat(n) {
 }
 
 function updateBeat1() {
-    //console.log(beat1);
-    //console.log(beat1Loaded);
+//console.log(beat1);
+//console.log(beat1Loaded);
     if (beat1) {
-        //console.log("Beat 1 stopping");
+//console.log("Beat 1 stopping");
         beat1 = false;
         beat1Source.stop();
     } else {
@@ -256,7 +339,7 @@ function updateBeat1() {
 
 function updateBeat2() {
     if (beat2) {
-        //console.log("Beat 1 stopping");
+//console.log("Beat 1 stopping");
         beat2 = false;
         beat2Source.stop();
     } else {
@@ -277,7 +360,7 @@ function updateBeat2() {
 
 function updateBeat3() {
     if (beat3) {
-        //console.log("Beat 1 stopping");
+//console.log("Beat 1 stopping");
         beat3 = false;
         beat3Source.stop();
     } else {
@@ -307,13 +390,23 @@ function updateHighPassFilter(element) {
     highPassFilter.gain.value = freq;
 }
 
+function updateLowPass(element) {
+    var freq = element.value;
+    lowPass.frequency = freq;
+}
+
+function updateHighPass(element) {
+    var freq = element.value;
+    highPass.frequency = freq;
+}
+
 function keySwitch(keyCode) {
     console.log(keyCode);
     try {
         switch (keyCode) {
             //Main Octave
             case 97:
-                playSound(sources[0]);
+                playSound(sources[0], 0, 0);
                 break;
             case 115:
                 playSound(sources[1]);
@@ -399,7 +492,7 @@ function stopCena() {
             downSources[i].stop();
             upSources[i].stop();
         } catch (e) {
-            
+
         }
     }
 }
@@ -408,7 +501,7 @@ function displayCoords(event) {
     var x = event.clientX;
     var y = event.clientY;
     console.log(x + ", " + y);
-    if(x < 471 && x > 416 && y > 428 && y < 466){
+    if (x < 471 && x > 416 && y > 428 && y < 466) {
         playSound(sources[0]);
         //console.log("Playing 0");
     } else if (x < 489 && x > 431 && y < 444 && y > 383) {
