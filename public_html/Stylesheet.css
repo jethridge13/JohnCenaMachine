@@ -9,8 +9,8 @@ strong{
 }
 
 #myCanvas{
-    width:95%;
-    height:fit-content;
+    width:1280px;
+    height:720px;
     border:1px solid #000000;
 }
 

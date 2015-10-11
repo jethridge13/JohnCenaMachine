@@ -2,6 +2,9 @@ var context;
 var buffers;
 var downBuffers;
 var upBuffers;
+var sources;
+var downSources;
+var upSources;
 var themeLoaded = false;
 var gainNode;
 var beatNode;
@@ -17,11 +20,23 @@ var beat3Buffer;
 var lowPassFilter;
 var highPassFilter;
 window.addEventListener('load', init, false);
+window.onload = function(){
+    var c = document.getElementById("myCanvas");
+    var context = c.getContext("2d");
+    var cena = new Image();
+    cena.onload = function() {
+        context.drawImage(cena, 0, 0);
+    };
+    cena.src = "./Cena.jpg";
+};
 function init() {
     try {
         buffers = [null, null, null, null, null, null, null, null];
         downBuffers = [null, null, null, null, null, null, null, null];
         upBuffers = [null, null, null, null, null, null, null, null];
+        sources = [null, null, null, null, null, null, null, null];
+        downSources = [null, null, null, null, null, null, null, null];
+        upSources = [null, null, null, null, null, null, null, null];
         window.AudioContext = window.AudioContext || window.webkitAudioContext;
         context = new AudioContext();
         gainNode = context.createGain();
@@ -30,6 +45,9 @@ function init() {
         lowPassFilter = context.createBiquadFilter();
         highPassFilter = context.createBiquadFilter();
         loadSounds();
+        //TODO This isn't the best way of dealing with it.
+        //Perhaps find a better way?
+        setTimeout(loadSources, 7000);
         //loadTheme("./MP3s/MainOctave/0.mp3");
         loadBeat("./MP3s/Beats/Beat1.mp3", 1);
         loadBeat("./MP3s/Beats/Beat2.mp3", 2);
@@ -41,25 +59,91 @@ function init() {
     }
 }
 
-function loadSounds(){
+function loadSounds() {
     //Main Octave Loop
-    for(var i = 0; i < 8; i++){
+    for (var i = 0; i < 8; i++) {
         var string = "./MP3s/MainOctave/";
         string += i;
-        string+= ".mp3";
+        string += ".mp3";
         loadTheme(string, 0, i);
     }
-    for(var i = 0; i < 8; i++){
+    for (var i = 0; i < 8; i++) {
         var string = "./MP3s/DownOctave/";
         string += i;
         string += ".mp3";
         loadTheme(string, 1, i);
     }
-    for(var i = 0; i < 8; i++){
+    for (var i = 0; i < 8; i++) {
         var string = "./MP3s/UpOctave/";
         string += i;
         string += ".mp3";
         loadTheme(string, 2, i);
+    }
+}
+
+function loadSources() {
+    for (var i = 0; i < 8; i++) {
+        var source = context.createBufferSource();
+        //console.log(i + ": " + buffers[i]);
+        source.buffer = buffers[i];
+        //source.connect(context.destination);
+        source.connect(gainNode);
+        gainNode.connect(context.destination);
+
+        source.connect(lowPassFilter);
+        lowPassFilter.connect(context.destination);
+        lowPassFilter.type = "lowshelf";
+        lowPassFilter.value = 440;
+        lowPassFilter.gain.value = -100;
+
+        source.connect(highPassFilter);
+        highPassFilter.connect(context.destination);
+        highPassFilter.type = "highshelf";
+        highPassFilter.value = 440;
+        highPassFilter.gain.value = -100;
+        sources[i] = source;
+    }
+    for (var i = 0; i < 8; i++) {
+        var source = context.createBufferSource();
+        //console.log(i + ": " + downBuffers[i]);
+        source.buffer = downBuffers[i];
+        //source.connect(context.destination);
+        source.connect(gainNode);
+        gainNode.connect(context.destination);
+
+        source.connect(lowPassFilter);
+        lowPassFilter.connect(context.destination);
+        lowPassFilter.type = "lowshelf";
+        lowPassFilter.value = 440;
+        lowPassFilter.gain.value = -100;
+
+        source.connect(highPassFilter);
+        highPassFilter.connect(context.destination);
+        highPassFilter.type = "highshelf";
+        highPassFilter.value = 440;
+        highPassFilter.gain.value = -100;
+        downSources[i] = source;
+    }
+    for (var i = 0; i < 8; i++) {
+        var source = context.createBufferSource();
+        //console.log(i + ": " + upBuffers[i]);
+        source.buffer = upBuffers[i];
+        //source.connect(context.destination);
+        source.connect(gainNode);
+        gainNode.connect(context.destination);
+
+        source.connect(lowPassFilter);
+        lowPassFilter.connect(context.destination);
+        lowPassFilter.type = "lowshelf";
+        lowPassFilter.value = 440;
+        lowPassFilter.gain.value = -100;
+
+        source.connect(highPassFilter);
+        highPassFilter.connect(context.destination);
+        highPassFilter.type = "highshelf";
+        highPassFilter.value = 440;
+        highPassFilter.gain.value = -100;
+        upSources[i] = source;
     }
 }
 
@@ -70,7 +154,7 @@ function loadTheme(url, n, i) {
     request.onload = function () {
         //console.log("Request loaded");
         context.decodeAudioData(request.response, function (buffer) {
-            switch(n){
+            switch (n) {
                 case 0:
                     buffers[i] = buffer;
                     break;
@@ -96,7 +180,7 @@ function loadBeat(url, n) {
     request.responseType = 'arraybuffer';
     request.onload = function () {
         context.decodeAudioData(request.response, function (buffer) {
-            switch (n){
+            switch (n) {
                 case 1:
                     beat1Buffer = buffer;
                     break;
@@ -116,25 +200,7 @@ function loadBeat(url, n) {
     request.send();
 }
 
-function playSound(buffer) {
-    var source = context.createBufferSource();
-    source.buffer = buffer;
-    //source.connect(context.destination);
-    source.connect(gainNode);
-    gainNode.connect(context.destination);
-
-    source.connect(lowPassFilter);
-    lowPassFilter.connect(context.destination);
-    lowPassFilter.type = "lowshelf";
-    lowPassFilter.value = 440;
-    lowPassFilter.gain.value = -100;
-
-    source.connect(highPassFilter);
-    highPassFilter.connect(context.destination);
-    highPassFilter.type = "highshelf";
-    highPassFilter.value = 440;
-    highPassFilter.gain.value = -100;
-
+function playSound(source) {
     source.start(0);
 }
 
@@ -149,8 +215,8 @@ function updateBeatVolume(val) {
     beatNode.gain.value = volume;
 }
 
-function updateBeat(n){
-    switch(n){
+function updateBeat(n) {
+    switch (n) {
         case 1:
             updateBeat1();
             break;
@@ -171,7 +237,7 @@ function updateBeat1() {
         beat1 = false;
         beat1Source.stop();
     } else {
-        try{
+        try {
             var source = context.createBufferSource();
             source.buffer = beat1Buffer;
             //source.connect(context.destination);
@@ -181,7 +247,7 @@ function updateBeat1() {
             beat1 = true;
             source.loop = 1;
             beat1Source = source;
-        } catch(e){
+        } catch (e) {
             alert("Sound not yet loaded");
             console.log(e);
         }
@@ -194,7 +260,7 @@ function updateBeat2() {
         beat2 = false;
         beat2Source.stop();
     } else {
-        try{
+        try {
             var source = context.createBufferSource();
             source.buffer = beat2Buffer;
             source.connect(beatNode);
@@ -203,7 +269,7 @@ function updateBeat2() {
             beat2 = true;
             source.loop = 1;
             beat2Source = source;
-        } catch(e){
+        } catch (e) {
             alert("Sound not yet loaded");
         }
     }
@@ -215,7 +281,7 @@ function updateBeat3() {
         beat3 = false;
         beat3Source.stop();
     } else {
-        try{
+        try {
             var source = context.createBufferSource();
             source.buffer = beat3Buffer;
             source.connect(beatNode);
@@ -224,7 +290,7 @@ function updateBeat3() {
             beat3 = true;
             source.loop = 1;
             beat3Source = source;
-        } catch(e){
+        } catch (e) {
             alert("Sound not yet loaded");
         }
     }
@@ -247,78 +313,78 @@ function keySwitch(keyCode) {
         switch (keyCode) {
             //Main Octave
             case 97:
-                playSound(buffers[0]);
+                playSound(sources[0]);
                 break;
             case 115:
-                playSound(buffers[1]);
+                playSound(sources[1]);
                 break;
             case 100:
-                playSound(buffers[2]);
+                playSound(sources[2]);
                 break;
             case 102:
-                playSound(buffers[3]);
+                playSound(sources[3]);
                 break;
             case 103:
-                playSound(buffers[4]);
+                playSound(sources[4]);
                 break;
             case 104:
-                playSound(buffers[5]);
+                playSound(sources[5]);
                 break;
             case 106:
-                playSound(buffers[6]);
+                playSound(sources[6]);
                 break;
             case 107:
-                playSound(buffers[7]);
+                playSound(sources[7]);
                 break;
-            //Down Octave
+                //Down Octave
             case 122:
-                playSound(downBuffers[0]);
+                playSound(downSources[0]);
                 break;
             case 120:
-                playSound(downBuffers[1]);
+                playSound(downSources[1]);
                 break;
             case 99:
-                playSound(downBuffers[2]);
+                playSound(downSources[2]);
                 break;
             case 118:
-                playSound(downBuffers[3]);
+                playSound(downSources[3]);
                 break;
             case 98:
-                playSound(downBuffers[4]);
+                playSound(downSources[4]);
                 break;
             case 110:
-                playSound(downBuffers[5]);
+                playSound(downSources[5]);
                 break;
             case 109:
-                playSound(downBuffers[6]);
+                playSound(downSources[6]);
                 break;
             case 44:
-                playSound(downBuffers[6]);
+                playSound(downSources[6]);
                 break;
-            //Up Octave
+                //Up Octave
             case 113:
-                playSound(upBuffers[0]);
+                playSound(upSources[0]);
                 break;
             case 119:
-                playSound(upBuffers[1]);
+                playSound(upSources[1]);
                 break;
             case 101:
-                playSound(upBuffers[2]);
+                playSound(upSources[2]);
                 break;
             case 114:
-                playSound(upBuffers[3]);
+                playSound(upSources[3]);
                 break;
             case 116:
-                playSound(upBuffers[4]);
+                playSound(upSources[4]);
                 break;
             case 121:
-                playSound(upBuffers[5]);
+                playSound(upSources[5]);
                 break;
             case 117:
-                playSound(upBuffers[6]);
+                playSound(upSources[6]);
                 break;
             case 105:
-                playSound(upBuffers[7]);
+                playSound(upSources[7]);
                 break;
         }
     } catch (e) {
@@ -326,8 +392,34 @@ function keySwitch(keyCode) {
     }
 }
 
+function stopCena() {
+    for (var i = 0; i < sources.length; i++) {
+        try {
+            sources[i].stop();
+            downSources[i].stop();
+            upSources[i].stop();
+        } catch (e) {
+            
+        }
+    }
+}
+
 function displayCoords(event) {
     var x = event.clientX;
     var y = event.clientY;
-    alert(x + " " + y);
+    console.log(x + ", " + y);
+    if(x < 471 && x > 416 && y > 428 && y < 466){
+        playSound(sources[0]);
+        //console.log("Playing 0");
+    } else if (x < 489 && x > 431 && y < 444 && y > 383) {
+        playSound(sources[1]);
+        //console.log("Playing 1");
+    } else if (x < 513 && x > 458 && y < 417 && y > 357) {
+        playSound(sources[2]);
+        //console.log("Playing 2");
+    } else if (x < 542 && x > 506 && y < 416 && y > 346) {
+        playSound(sources[3]);
+    } else if (x < 603 && x > 557 && y < 428 && y > 405) {
+        playSound(sources[4]);
+    }
 }

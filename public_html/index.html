@@ -22,8 +22,9 @@ and open the template in the editor.
             <span class="toolbarButton"><input type="checkBox" name="Beat3" value="Beat3" onchange="updateBeat(3)"><strong>Beat 3</strong></span>
             <span class="toolbarButton"><input type="range" min="-100" max="15" value="-100" oninput="updateLowPassFilter(this)"><strong>Bass Booster</strong></span>
             <span class="toolbarButton"><input type="range" min="-100" max="15" value="-100" oninput="updateHighPassFilter(this)"><strong>Treble Booster</strong></span>
+            <!--<span class="toolbarButton"><input type="button" name="stop" value = "Stop" onclick="stopCena();"></span> -->
         </div>
-        <canvas id="myCanvas" onmousedown="displayCoords(event)">
+        <canvas id="myCanvas" width="1280" height="720" onmousedown="displayCoords(event)">
         </canvas>
         <script>
             //init();
