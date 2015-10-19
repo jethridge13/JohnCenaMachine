@@ -21,8 +21,10 @@ var lowPassFilter;
 var highPassFilter;
 var lowPass;
 var highPass;
+var keyLevel;
 window.addEventListener('load', init, false);
 window.onload = function () {
+    keyLevel = 0;
     var c = document.getElementById("myCanvas");
     var context = c.getContext("2d");
     var cena = new Image();
@@ -409,75 +411,75 @@ function keySwitch(keyCode) {
                 playSound(sources[0], 0, 0);
                 break;
             case 115:
-                playSound(sources[1]);
+                playSound(sources[1], 0, 1);
                 break;
             case 100:
-                playSound(sources[2]);
+                playSound(sources[2], 0, 2);
                 break;
             case 102:
-                playSound(sources[3]);
+                playSound(sources[3], 0, 3);
                 break;
             case 103:
-                playSound(sources[4]);
+                playSound(sources[4], 0, 4);
                 break;
             case 104:
-                playSound(sources[5]);
+                playSound(sources[5], 0, 5);
                 break;
             case 106:
-                playSound(sources[6]);
+                playSound(sources[6], 0, 6);
                 break;
             case 107:
-                playSound(sources[7]);
+                playSound(sources[7], 0, 7);
                 break;
                 //Down Octave
             case 122:
-                playSound(downSources[0]);
+                playSound(downSources[0], 1, 0);
                 break;
             case 120:
-                playSound(downSources[1]);
+                playSound(downSources[1], 1, 1);
                 break;
             case 99:
-                playSound(downSources[2]);
+                playSound(downSources[2], 1, 2);
                 break;
             case 118:
-                playSound(downSources[3]);
+                playSound(downSources[3], 1, 3);
                 break;
             case 98:
-                playSound(downSources[4]);
+                playSound(downSources[4], 1, 4);
                 break;
             case 110:
-                playSound(downSources[5]);
+                playSound(downSources[5], 1, 5);
                 break;
             case 109:
-                playSound(downSources[6]);
+                playSound(downSources[6], 1, 6);
                 break;
             case 44:
-                playSound(downSources[6]);
+                playSound(downSources[7], 1, 7);
                 break;
                 //Up Octave
             case 113:
-                playSound(upSources[0]);
+                playSound(upSources[0], 2, 0);
                 break;
             case 119:
-                playSound(upSources[1]);
+                playSound(upSources[1], 2, 1);
                 break;
             case 101:
-                playSound(upSources[2]);
+                playSound(upSources[2], 2, 2);
                 break;
             case 114:
-                playSound(upSources[3]);
+                playSound(upSources[3], 2, 3);
                 break;
             case 116:
-                playSound(upSources[4]);
+                playSound(upSources[4], 2, 4);
                 break;
             case 121:
-                playSound(upSources[5]);
+                playSound(upSources[5], 2, 5);
                 break;
             case 117:
-                playSound(upSources[6]);
+                playSound(upSources[6], 2, 6);
                 break;
             case 105:
-                playSound(upSources[7]);
+                playSound(upSources[7], 2, 7);
                 break;
         }
     } catch (e) {
@@ -497,22 +499,125 @@ function stopCena() {
     }
 }
 
+function upKey() {
+    //console.log("UP!");
+    if (keyLevel < 3) {
+        keyLevel++;
+    }
+}
+
+function downKey() {
+    //console.log("DOWN!");
+    if (keyLevel > -2) {
+        keyLevel--;
+    }
+}
+
 function displayCoords(event) {
     var x = event.clientX;
     var y = event.clientY;
-    console.log(x + ", " + y);
-    if (x < 471 && x > 416 && y > 428 && y < 466) {
-        playSound(sources[0]);
-        //console.log("Playing 0");
-    } else if (x < 489 && x > 431 && y < 444 && y > 383) {
-        playSound(sources[1]);
-        //console.log("Playing 1");
-    } else if (x < 513 && x > 458 && y < 417 && y > 357) {
-        playSound(sources[2]);
-        //console.log("Playing 2");
-    } else if (x < 542 && x > 506 && y < 416 && y > 346) {
-        playSound(sources[3]);
-    } else if (x < 603 && x > 557 && y < 428 && y > 405) {
-        playSound(sources[4]);
+    //console.log(x + ", " + y);
+    if (x < 587 && x > 505 && y < 566 && y > 484) {
+        upKey();
+    } else if (x < 608 && x > 510 && y < 640 && y > 570) {
+        downKey();
+    }
+    switch (keyLevel) {
+        case 0:
+            if (x < 471 && x > 416 && y > 428 && y < 466) {
+                keySwitch(97);
+                //console.log("Playing 0");
+            } else if (x < 489 && x > 431 && y < 444 && y > 383) {
+                keySwitch(115);
+                //console.log("Playing 1");
+            } else if (x < 513 && x > 458 && y < 417 && y > 357) {
+                keySwitch(100);
+                //console.log("Playing 2");
+            } else if (x < 542 && x > 506 && y < 416 && y > 346) {
+                keySwitch(102);
+            } else if (x < 603 && x > 557 && y < 428 && y > 405) {
+                keySwitch(103);
+            }
+            break;
+        case 1:
+            if (x < 471 && x > 416 && y > 428 && y < 466) {
+                keySwitch(104);
+                //console.log("Playing 0");
+            } else if (x < 489 && x > 431 && y < 444 && y > 383) {
+                keySwitch(106);
+                //console.log("Playing 1");
+            } else if (x < 513 && x > 458 && y < 417 && y > 357) {
+                keySwitch(107);
+                //console.log("Playing 2");
+            } else if (x < 542 && x > 506 && y < 416 && y > 346) {
+                keySwitch(113);
+            } else if (x < 603 && x > 557 && y < 428 && y > 405) {
+                keySwitch(119);
+            }
+            break;
+        case 2:
+            if (x < 471 && x > 416 && y > 428 && y < 466) {
+                keySwitch(101);
+                //console.log("Playing 0");
+            } else if (x < 489 && x > 431 && y < 444 && y > 383) {
+                keySwitch(114);
+                //console.log("Playing 1");
+            } else if (x < 513 && x > 458 && y < 417 && y > 357) {
+                keySwitch(116);
+                //console.log("Playing 2");
+            } else if (x < 542 && x > 506 && y < 416 && y > 346) {
+                keySwitch(121);
+            } else if (x < 603 && x > 557 && y < 428 && y > 405) {
+                keySwitch(117);
+            }
+            break;
+        case 3:
+            if (x < 471 && x > 416 && y > 428 && y < 466) {
+                keySwitch(114);
+                //console.log("Playing 0");
+            } else if (x < 489 && x > 431 && y < 444 && y > 383) {
+                keySwitch(116);
+                //console.log("Playing 1");
+            } else if (x < 513 && x > 458 && y < 417 && y > 357) {
+                keySwitch(121);
+                //console.log("Playing 2");
+            } else if (x < 542 && x > 506 && y < 416 && y > 346) {
+                keySwitch(117);
+            } else if (x < 603 && x > 557 && y < 428 && y > 405) {
+                keySwitch(105);
+            }
+            break;
+        case -1:
+            if (x < 471 && x > 416 && y > 428 && y < 466) {
+                keySwitch(118);
+                //console.log("Playing 0");
+            } else if (x < 489 && x > 431 && y < 444 && y > 383) {
+                keySwitch(98);
+                //console.log("Playing 1");
+            } else if (x < 513 && x > 458 && y < 417 && y > 357) {
+                keySwitch(110);
+                //console.log("Playing 2");
+            } else if (x < 542 && x > 506 && y < 416 && y > 346) {
+                keySwitch(109);
+            } else if (x < 603 && x > 557 && y < 428 && y > 405) {
+                keySwitch(44);
+            }
+            break;
+        case -2:
+            if (x < 471 && x > 416 && y > 428 && y < 466) {
+                keySwitch(122);
+                //console.log("Playing 0");
+            } else if (x < 489 && x > 431 && y < 444 && y > 383) {
+                keySwitch(120);
+                //console.log("Playing 1");
+            } else if (x < 513 && x > 458 && y < 417 && y > 357) {
+                keySwitch(99);
+                //console.log("Playing 2");
+            } else if (x < 542 && x > 506 && y < 416 && y > 346) {
+                keySwitch(118);
+            } else if (x < 603 && x > 557 && y < 428 && y > 405) {
+                keySwitch(98);
+            }
+            break;
     }
 }
