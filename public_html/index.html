@@ -11,9 +11,11 @@ and open the template in the editor.
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel ="stylesheet" type="text/css" href="./Stylesheet.css" />
         <script src ="./js/JohnCenaMachine.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     </head>
     <body onKeyPress="keySwitch(event.keyCode)">
         <h1>The John Cena Machine by Leg Day</h1>
+        <div id="content">
         <div id="controlsToolbar">
             <span class="toolbarButton"><input type="range" oninput="updateCenaVolume(this.value);"><strong>John Cena Volume</strong></span>
             <span class="toolbarButton"><input type="range" oninput="updateBeatVolume(this.value);"><strong>Beat Volume</strong></span>
@@ -24,12 +26,27 @@ and open the template in the editor.
             <span class="toolbarButton"><input type="range" min="-100" max="15" value="-100" oninput="updateHighPassFilter(this)"><strong>Treble Booster</strong></span>
             <span class="toolbarButton"><input type="range" min="0" max="10000" value="0" oninput="updateLowPass(this)"><strong>Low Pass Filter</strong></span>
             <span class="toolbarButton"><input type="range" min="0" max="10000" value="0" oninput="updateHighPass(this)"><strong>High Pass Filter</strong></span>
-            <!--<span class="toolbarButton"><input type="button" name="stop" value = "Stop" onclick="stopCena();"></span> -->
+            <span class="toolbarButton"><input type="button" name="stop" value = "Stop" onclick="stopCena();"></span>
         </div>
-        <canvas id="myCanvas" width="1280" height="720" onmousedown="displayCoords(event)">
+        <canvas id="myCanvas" width="1280" height="720" onmousedown="displayCoords(event)" onmouseup="refreshCanvas()">
         </canvas>
-        <script>
-            //init();
-        </script>
+        </div>
+        <div id="start">
+            <h2>Welcome to the John Cena Machine!</h2>
+            <p>To play the John Cena Machine, click on John Cena's fingers. 
+            Each finger plays a different note. You can increase the pitch of 
+            the notes by clicking on the upper wristband and decrease the pitch
+            of the notes by clicking on the lower wristband. </p>
+            <p>Wait a few moments (around 7 seconds) to ensure the sounds load 
+                before playing them.
+            Playing a sound before it is loaded causes that note to break, but
+            can be fixed by reloading the page. Make sure to have the page
+            fullscreen to be able to click properly.</p>
+            <p>Additionally, the notes are bound to the keys Q-I, A-K, and 
+            Z-< on the keyboard. A-K being the normal octave, Q-I being the
+            higher octave, and Z-< being the lower octave.</p>
+            <p>Press OK to continue</p>
+            <span class="toolbarButton"><input type="button" name="OK" value="OK" onclick="showCena()"></span>
+        </div>
     </body>
 </html>

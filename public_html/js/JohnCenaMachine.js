@@ -22,16 +22,24 @@ var highPassFilter;
 var lowPass;
 var highPass;
 var keyLevel;
+var soundsPlaying = [];
+var canvas;
+var cena;
+var logo;
+
 window.addEventListener('load', init, false);
 window.onload = function () {
     keyLevel = 0;
     var c = document.getElementById("myCanvas");
-    var context = c.getContext("2d");
-    var cena = new Image();
+    canvas = c.getContext("2d");
+    cena = new Image();
     cena.onload = function () {
-        context.drawImage(cena, 0, 0);
+        canvas.drawImage(cena, 0, 0);
     };
     cena.src = "./Cena.jpg";
+    logo = new Image();
+    logo.src = "./Logo.jpg";
+    $("#content").hide();
 };
 function init() {
     try {
@@ -62,6 +70,11 @@ function init() {
         console.log(e);
         alert('An Error has occurred.');
     }
+}
+
+function showCena(){
+    $("#content").show();
+    $("#start").hide();
 }
 
 function loadSounds() {
@@ -213,6 +226,9 @@ function loadBeat(url, n) {
 
 function playSound(source, n, i) {
     source.start(0);
+    soundsPlaying.push(source);
+    setTimeout(stopSoundPlaying, 13500);
+    //TODO Timer for the length of the song.
     switch (n) {
         case 0:
             var source = context.createBufferSource();
@@ -488,15 +504,14 @@ function keySwitch(keyCode) {
 }
 
 function stopCena() {
-    for (var i = 0; i < sources.length; i++) {
-        try {
-            sources[i].stop();
-            downSources[i].stop();
-            upSources[i].stop();
-        } catch (e) {
-
-        }
+    for(var i = 0; i < soundsPlaying.length; i++){
+        soundsPlaying[i].stop();
     }
+    soundsPlaying = [];
+}
+
+function stopSoundPlaying(){
+    soundsPlaying.shift();
 }
 
 function upKey() {
@@ -513,6 +528,11 @@ function downKey() {
     }
 }
 
+function refreshCanvas(){
+    console.log("Refreshinc canvas...");
+    canvas.drawImage(cena, 0, 0);
+}
+
 function displayCoords(event) {
     var x = event.clientX;
     var y = event.clientY;
@@ -525,99 +545,160 @@ function displayCoords(event) {
     switch (keyLevel) {
         case 0:
             if (x < 471 && x > 416 && y > 428 && y < 466) {
+                y -= 180;
+                canvas.drawImage(logo, x, y);
                 keySwitch(97);
                 //console.log("Playing 0");
             } else if (x < 489 && x > 431 && y < 444 && y > 383) {
+                y -= 180;
+                canvas.drawImage(logo, x, y);
                 keySwitch(115);
                 //console.log("Playing 1");
             } else if (x < 513 && x > 458 && y < 417 && y > 357) {
+                y -= 180;
+                canvas.drawImage(logo, x, y);
                 keySwitch(100);
                 //console.log("Playing 2");
             } else if (x < 542 && x > 506 && y < 416 && y > 346) {
+                y -= 180;
+                canvas.drawImage(logo, x, y);
                 keySwitch(102);
             } else if (x < 603 && x > 557 && y < 428 && y > 405) {
+                y -= 180;
+                canvas.drawImage(logo, x, y);
                 keySwitch(103);
             }
             break;
         case 1:
             if (x < 471 && x > 416 && y > 428 && y < 466) {
+                y -= 180;
+                canvas.drawImage(logo, x, y);
                 keySwitch(104);
                 //console.log("Playing 0");
             } else if (x < 489 && x > 431 && y < 444 && y > 383) {
+                y -= 180;
+                canvas.drawImage(logo, x, y);
                 keySwitch(106);
                 //console.log("Playing 1");
             } else if (x < 513 && x > 458 && y < 417 && y > 357) {
+                y -= 180;
+                canvas.drawImage(logo, x, y);
                 keySwitch(107);
                 //console.log("Playing 2");
             } else if (x < 542 && x > 506 && y < 416 && y > 346) {
+                y -= 180;
+                canvas.drawImage(logo, x, y);
                 keySwitch(113);
             } else if (x < 603 && x > 557 && y < 428 && y > 405) {
+                y -= 180;
+                canvas.drawImage(logo, x, y);
                 keySwitch(119);
             }
             break;
         case 2:
             if (x < 471 && x > 416 && y > 428 && y < 466) {
+                y -= 180;
+                canvas.drawImage(logo, x, y);
                 keySwitch(101);
                 //console.log("Playing 0");
             } else if (x < 489 && x > 431 && y < 444 && y > 383) {
+                y -= 180;
+                canvas.drawImage(logo, x, y);
                 keySwitch(114);
                 //console.log("Playing 1");
             } else if (x < 513 && x > 458 && y < 417 && y > 357) {
+                y -= 180;
+                canvas.drawImage(logo, x, y);
                 keySwitch(116);
                 //console.log("Playing 2");
             } else if (x < 542 && x > 506 && y < 416 && y > 346) {
+                y -= 180;
+                canvas.drawImage(logo, x, y);
                 keySwitch(121);
             } else if (x < 603 && x > 557 && y < 428 && y > 405) {
+                y -= 180;
+                canvas.drawImage(logo, x, y);
                 keySwitch(117);
             }
             break;
         case 3:
             if (x < 471 && x > 416 && y > 428 && y < 466) {
+                y -= 180;
+                canvas.drawImage(logo, x, y);
                 keySwitch(114);
                 //console.log("Playing 0");
             } else if (x < 489 && x > 431 && y < 444 && y > 383) {
+                y -= 180;
+                canvas.drawImage(logo, x, y);
                 keySwitch(116);
                 //console.log("Playing 1");
             } else if (x < 513 && x > 458 && y < 417 && y > 357) {
+                y -= 180;
+                canvas.drawImage(logo, x, y);
                 keySwitch(121);
                 //console.log("Playing 2");
             } else if (x < 542 && x > 506 && y < 416 && y > 346) {
+                y -= 180;
+                canvas.drawImage(logo, x, y);
                 keySwitch(117);
             } else if (x < 603 && x > 557 && y < 428 && y > 405) {
+                y -= 180;
+                canvas.drawImage(logo, x, y);
                 keySwitch(105);
             }
             break;
         case -1:
             if (x < 471 && x > 416 && y > 428 && y < 466) {
+                y -= 180;
+                canvas.drawImage(logo, x, y);
                 keySwitch(118);
                 //console.log("Playing 0");
             } else if (x < 489 && x > 431 && y < 444 && y > 383) {
+                y -= 180;
+                canvas.drawImage(logo, x, y);
                 keySwitch(98);
                 //console.log("Playing 1");
             } else if (x < 513 && x > 458 && y < 417 && y > 357) {
+                y -= 180;
+                canvas.drawImage(logo, x, y);
                 keySwitch(110);
                 //console.log("Playing 2");
             } else if (x < 542 && x > 506 && y < 416 && y > 346) {
+                y -= 180;
+                canvas.drawImage(logo, x, y);
                 keySwitch(109);
             } else if (x < 603 && x > 557 && y < 428 && y > 405) {
+                y -= 180;
+                canvas.drawImage(logo, x, y);
                 keySwitch(44);
             }
             break;
         case -2:
             if (x < 471 && x > 416 && y > 428 && y < 466) {
+                y -= 180;
+                canvas.drawImage(logo, x, y);
                 keySwitch(122);
                 //console.log("Playing 0");
             } else if (x < 489 && x > 431 && y < 444 && y > 383) {
+                y -= 180;
+                canvas.drawImage(logo, x, y);
                 keySwitch(120);
                 //console.log("Playing 1");
             } else if (x < 513 && x > 458 && y < 417 && y > 357) {
+                y -= 180;
+                canvas.drawImage(logo, x, y);
                 keySwitch(99);
                 //console.log("Playing 2");
             } else if (x < 542 && x > 506 && y < 416 && y > 346) {
+                y -= 180;
+                canvas.drawImage(logo, x, y);
                 keySwitch(118);
             } else if (x < 603 && x > 557 && y < 428 && y > 405) {
+                y -= 180;
+                canvas.drawImage(logo, x, y);
                 keySwitch(98);
             }
             break;
     }
+    //setTimeout(refreshCanvas, 500);
 }
