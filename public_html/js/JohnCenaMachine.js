@@ -72,7 +72,7 @@ function init() {
     }
 }
 
-function showCena(){
+function showCena() {
     $("#content").show();
     $("#start").hide();
 }
@@ -504,13 +504,13 @@ function keySwitch(keyCode) {
 }
 
 function stopCena() {
-    for(var i = 0; i < soundsPlaying.length; i++){
+    for (var i = 0; i < soundsPlaying.length; i++) {
         soundsPlaying[i].stop();
     }
     soundsPlaying = [];
 }
 
-function stopSoundPlaying(){
+function stopSoundPlaying() {
     soundsPlaying.shift();
 }
 
@@ -528,8 +528,8 @@ function downKey() {
     }
 }
 
-function refreshCanvas(){
-    console.log("Refreshinc canvas...");
+function refreshCanvas() {
+    //console.log("Refreshinc canvas...");
     canvas.drawImage(cena, 0, 0);
 }
 
@@ -538,32 +538,45 @@ function displayCoords(event) {
     var y = event.clientY;
     //console.log(x + ", " + y);
     if (x < 587 && x > 505 && y < 566 && y > 484) {
+        x -= 32;
+        y -= 180;
+        canvas.drawImage(logo, x, y);
         upKey();
+        y = 0;
     } else if (x < 608 && x > 510 && y < 640 && y > 570) {
+        x -= 32;
+        y -= 180;
+        canvas.drawImage(logo, x, y);
         downKey();
+        x = 0;
     }
     switch (keyLevel) {
         case 0:
             if (x < 471 && x > 416 && y > 428 && y < 466) {
+                x -= 32;
                 y -= 180;
                 canvas.drawImage(logo, x, y);
                 keySwitch(97);
                 //console.log("Playing 0");
             } else if (x < 489 && x > 431 && y < 444 && y > 383) {
+                x -= 32;
                 y -= 180;
                 canvas.drawImage(logo, x, y);
                 keySwitch(115);
                 //console.log("Playing 1");
             } else if (x < 513 && x > 458 && y < 417 && y > 357) {
+                x -= 32;
                 y -= 180;
                 canvas.drawImage(logo, x, y);
                 keySwitch(100);
                 //console.log("Playing 2");
             } else if (x < 542 && x > 506 && y < 416 && y > 346) {
+                x -= 32;
                 y -= 180;
                 canvas.drawImage(logo, x, y);
                 keySwitch(102);
             } else if (x < 603 && x > 557 && y < 428 && y > 405) {
+                x -= 32;
                 y -= 180;
                 canvas.drawImage(logo, x, y);
                 keySwitch(103);
@@ -571,25 +584,30 @@ function displayCoords(event) {
             break;
         case 1:
             if (x < 471 && x > 416 && y > 428 && y < 466) {
+                x -= 32;
                 y -= 180;
                 canvas.drawImage(logo, x, y);
                 keySwitch(104);
                 //console.log("Playing 0");
             } else if (x < 489 && x > 431 && y < 444 && y > 383) {
+                x -= 32;
                 y -= 180;
                 canvas.drawImage(logo, x, y);
                 keySwitch(106);
                 //console.log("Playing 1");
             } else if (x < 513 && x > 458 && y < 417 && y > 357) {
+                x -= 32;
                 y -= 180;
                 canvas.drawImage(logo, x, y);
                 keySwitch(107);
                 //console.log("Playing 2");
             } else if (x < 542 && x > 506 && y < 416 && y > 346) {
+                x -= 32;
                 y -= 180;
                 canvas.drawImage(logo, x, y);
                 keySwitch(113);
             } else if (x < 603 && x > 557 && y < 428 && y > 405) {
+                x -= 32;
                 y -= 180;
                 canvas.drawImage(logo, x, y);
                 keySwitch(119);
@@ -597,25 +615,30 @@ function displayCoords(event) {
             break;
         case 2:
             if (x < 471 && x > 416 && y > 428 && y < 466) {
+                x -= 32;
                 y -= 180;
                 canvas.drawImage(logo, x, y);
                 keySwitch(101);
                 //console.log("Playing 0");
             } else if (x < 489 && x > 431 && y < 444 && y > 383) {
+                x -= 32;
                 y -= 180;
                 canvas.drawImage(logo, x, y);
                 keySwitch(114);
                 //console.log("Playing 1");
             } else if (x < 513 && x > 458 && y < 417 && y > 357) {
+                x -= 32;
                 y -= 180;
                 canvas.drawImage(logo, x, y);
                 keySwitch(116);
                 //console.log("Playing 2");
             } else if (x < 542 && x > 506 && y < 416 && y > 346) {
+                x -= 32;
                 y -= 180;
                 canvas.drawImage(logo, x, y);
                 keySwitch(121);
             } else if (x < 603 && x > 557 && y < 428 && y > 405) {
+                x -= 32;
                 y -= 180;
                 canvas.drawImage(logo, x, y);
                 keySwitch(117);
@@ -623,25 +646,30 @@ function displayCoords(event) {
             break;
         case 3:
             if (x < 471 && x > 416 && y > 428 && y < 466) {
+                x -= 32;
                 y -= 180;
                 canvas.drawImage(logo, x, y);
                 keySwitch(114);
                 //console.log("Playing 0");
             } else if (x < 489 && x > 431 && y < 444 && y > 383) {
+                x -= 32;
                 y -= 180;
                 canvas.drawImage(logo, x, y);
                 keySwitch(116);
                 //console.log("Playing 1");
             } else if (x < 513 && x > 458 && y < 417 && y > 357) {
+                x -= 32;
                 y -= 180;
                 canvas.drawImage(logo, x, y);
                 keySwitch(121);
                 //console.log("Playing 2");
             } else if (x < 542 && x > 506 && y < 416 && y > 346) {
+                x -= 32;
                 y -= 180;
                 canvas.drawImage(logo, x, y);
                 keySwitch(117);
             } else if (x < 603 && x > 557 && y < 428 && y > 405) {
+                x -= 32;
                 y -= 180;
                 canvas.drawImage(logo, x, y);
                 keySwitch(105);
@@ -649,25 +677,30 @@ function displayCoords(event) {
             break;
         case -1:
             if (x < 471 && x > 416 && y > 428 && y < 466) {
+                x -= 32;
                 y -= 180;
                 canvas.drawImage(logo, x, y);
                 keySwitch(118);
                 //console.log("Playing 0");
             } else if (x < 489 && x > 431 && y < 444 && y > 383) {
+                x -= 32;
                 y -= 180;
                 canvas.drawImage(logo, x, y);
                 keySwitch(98);
                 //console.log("Playing 1");
             } else if (x < 513 && x > 458 && y < 417 && y > 357) {
+                x -= 32;
                 y -= 180;
                 canvas.drawImage(logo, x, y);
                 keySwitch(110);
                 //console.log("Playing 2");
             } else if (x < 542 && x > 506 && y < 416 && y > 346) {
+                x -= 32;
                 y -= 180;
                 canvas.drawImage(logo, x, y);
                 keySwitch(109);
             } else if (x < 603 && x > 557 && y < 428 && y > 405) {
+                x -= 32;
                 y -= 180;
                 canvas.drawImage(logo, x, y);
                 keySwitch(44);
@@ -675,25 +708,30 @@ function displayCoords(event) {
             break;
         case -2:
             if (x < 471 && x > 416 && y > 428 && y < 466) {
+                x -= 32;
                 y -= 180;
                 canvas.drawImage(logo, x, y);
                 keySwitch(122);
                 //console.log("Playing 0");
             } else if (x < 489 && x > 431 && y < 444 && y > 383) {
+                x -= 32;
                 y -= 180;
                 canvas.drawImage(logo, x, y);
                 keySwitch(120);
                 //console.log("Playing 1");
             } else if (x < 513 && x > 458 && y < 417 && y > 357) {
+                x -= 32;
                 y -= 180;
                 canvas.drawImage(logo, x, y);
                 keySwitch(99);
                 //console.log("Playing 2");
             } else if (x < 542 && x > 506 && y < 416 && y > 346) {
+                x -= 32;
                 y -= 180;
                 canvas.drawImage(logo, x, y);
                 keySwitch(118);
             } else if (x < 603 && x > 557 && y < 428 && y > 405) {
+                x -= 32;
                 y -= 180;
                 canvas.drawImage(logo, x, y);
                 keySwitch(98);
